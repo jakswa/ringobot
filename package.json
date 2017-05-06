@@ -1,0 +1,14 @@
+{
+  "name": "ringo_bot",
+  "version": "0.0.1",
+  "description": "ringo bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jake Swanson <jakswa@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/client": "^3.9.0"
+  }
+}
