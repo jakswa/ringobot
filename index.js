@@ -1,12 +1,18 @@
 var RtmClient = require('@slack/client').RtmClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
 
 var bot_token = process.env.SLACKIN_BOT_TOKEN || '';
-
 var rtm = new RtmClient(bot_token);
 
-var botModules = [require('./trivia')]
+// Loading Ringobot plugins
+var plugins = [];
+fs.readdirSync(path.join(__dirname, "plugins")).forEach(function(file) {
+  plugins.push(require("./plugins/" + file));
+});
 
 // The client will emit an RTM.AUTHENTICATED event on successful connection, with the `rtm.start` payload if you want to cache it
 rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
@@ -14,13 +20,11 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
 });
 
 rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
-  console.log(message.user, message.text)
-  for (var i = 0; i < botModules.length; i++) {
-    var module = botModules[i];
+  for (var i = 0; i < plugins.length; i++) {
+    var plugin = plugins[i];
     // if a bot has registered that it cares about messages, pass it in
-    var response = module.responseFor(message);
+    var response = plugin.responseFor(message);
     if (response) {
-      console.log('  ->', response)
       rtm.sendMessage(response, message.channel).catch(function(err) { 
         console.log('err:', err)
       });
@@ -30,3 +34,14 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
 });
 
 rtm.start();
+
+const server = http.createServer((req, res) => {
+  res.end();
+});
+
+server.on('clientError', (err, socket) => {
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
+server.listen(process.env['PORT']);
+
