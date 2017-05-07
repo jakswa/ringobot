@@ -61,8 +61,6 @@ Trivia.randomStarter = function() {
 
 // -- BEGIN BOT INTERFACE --
 Trivia.responseFor = function(message) {
-  // don't care about.. thread responses? they breaking it
-  if (!message.text) return;
   // if they're asking for the question
   var msg = '';
   if (this.STARTER_MESSAGES.find(function(i) { return message.text.match(i) })) {
