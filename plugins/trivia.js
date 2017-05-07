@@ -15,7 +15,14 @@ function Trivia(channel) {
  * able to participate a little bit.
  */
 Trivia.ROUND_SIZE = 10
-Trivia.QUESTIONS = secrets.decryptFile("trivia_questions");
+
+// encrypted trivia questions
+try {
+  Trivia.QUESTIONS = secrets.decryptFile("trivia_questions");
+} catch (err) {
+  Trivia.QUESTIONS = [["Do you know where to get the real questions?", ["no"]]]
+}
+
 Trivia.STARTING_PHRASES = [
   "Okay! Here we go: ", "Woohoo! First one: ", "Buckle up! First question: ",
   "Trivia engaged! *pew pew*... ", "*yawn* Really? Okay, here: ",

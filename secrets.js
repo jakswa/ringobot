@@ -4,8 +4,6 @@ var crypto = require('crypto'),
   algorithm = 'aes-256-ctr',
   password = process.env["RINGOBOT_SECRETS_KEY"];
 
-if (!password) throw new Error("No RINGOBOT_SECRETS_KEY set :O");
-
 module.exports = {
   decryptFile: decryptFile,
   toJSON: toJSON,
@@ -33,6 +31,7 @@ function filePath(filename) {
 }
 
 function encrypt(text){
+  assertPassword();
   var cipher = crypto.createCipher(algorithm, password)
   var crypted = cipher.update(text,'utf8','base64')
   crypted += cipher.final('base64');
@@ -40,9 +39,13 @@ function encrypt(text){
 }
  
 function decrypt(text){
+  assertPassword();
   var decipher = crypto.createDecipher(algorithm, password)
   var dec = decipher.update(text,'base64','utf8')
   dec += decipher.final('utf8');
   return dec;
 }
 
+function assertPassword() {
+  if (!password) throw new Error("No RINGOBOT_SECRETS_KEY set :O");
+}
