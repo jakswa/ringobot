@@ -9,6 +9,7 @@
   "author": "Jake Swanson <jakswa@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@slack/client": "^3.9.0"
+    "@slack/client": "^3.9.0",
+    "ringo_momma": "0.0.1"
   }
 }
