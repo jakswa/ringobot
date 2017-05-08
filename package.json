@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^3.9.0",
-    "ringo_momma": "0.0.2"
+    "ringo_cat_facts": "0.0.2",
   }
 }
