@@ -12,7 +12,7 @@ const CACTUS_FACTS = [
   'Size and shape of flower depends on the species of cacti and type of pollination. They can be white, red, orange, pink or blue in color.',
   'Butterflies, bees, moths, bats and hummingbirds are main pollinators of cacti.',
   'Spines of cactus can be used in the production of hooks, combs and needles. Fruit can be used as food.',
-  'Certain cacti produce substance called mescaline which induces hallucinogenic effects. It has been used by shamans to induce trans-like state and ensure "communication" with God.',
+  'Certain cacti produce substance called mescaline which induces hallucinogenic effects. It has been used by shamans to induce trance-like state and ensure "communication" with God.',
   'Cacti can survive from 15 to 300 years, depending on the species.',
   'Depending on the species, cactus\'s spines can be extremely fragile or terrible venomous spikes, several centimeters long.',
   'Cactus spines can be used for sutures, after they have been first sterilized on hot coal.',
