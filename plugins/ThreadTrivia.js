@@ -6,6 +6,16 @@ const ROUND_SIZE = 10;
 const START_DELAY = 5; // seconds to allow thread joining
 const TRIVIA_STARTS = [/i.*need.*trivia/i, /trivia me/i, /host some trivia/i];
 const LETS_GO = [
+  'Whew. I thought you\'d never ask. Come, into this thread:',
+  'The other day, I heard someone say "Trivia is so lit rn." To the thread:',
+  'Did you hear what is for dinner? Trivia! In this thread:',
+  'Thread time! Ding ding! Come one, come all, join us for trivia:',
+  'There is a trivia storm brewing in this thread:',
+  'Trivia takes a lot out of me. If only I could answer my own questions. In this thread:',
+  'Back already? Alright, I\'m cooking up some questions in the thread:',
+  'I am so excited! Someone wants to play trivia! Into the thread:',
+  'You think you have what it takes? Vroom into this thread:',
+  'Sure, you seem nice enough. Dive into this thread, my friends:', 
   'My friends! Trivia starts in a few seconds, join me in the thread below!'
 ];
 const TRIVIA_SESSIONS = {};
