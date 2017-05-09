@@ -23,7 +23,7 @@ function toJSON(filename) {
 
 function toEncrypted(filename) {
   var contents = fs.readFileSync(filePath(filename + ".json"), 'utf8');
-  fs.writeFileSync(filename, encrypt(contents));
+  fs.writeFileSync(filePath(filename), encrypt(contents));
 }
 
 function filePath(filename) {
