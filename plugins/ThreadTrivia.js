@@ -64,6 +64,11 @@ class ThreadTrivia {
   }
 
   checkMessage(message, rtm) {
+    if (message.text === 'repeat question') {
+      this.sendQuestion(rtm);
+      return;
+    }
+
     let answer = this.matchingAnswer(message.text);
     if (!answer) return;
 
