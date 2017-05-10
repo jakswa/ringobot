@@ -31,10 +31,11 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
   // don't care about.. thread responses? they breaking it
   // TODO: figure out what all kinds of messages we should care about
   if (!message.text) return;
+  if (process.env.DEV && !message.text.match(/DEV/)) return;
   for (var i = 0; i < plugins.length; i++) {
     var plugin = plugins[i];
     // if a bot has registered that it cares about messages, pass it in
-    var response = plugin.responseFor && plugin.responseFor(message, rtm);
+    var response = plugin.responseFor && plugin.responseFor(message, rtm, webClient);
   }
 });
 
