@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@slack/client": "^3.9.0",
+    "coinbase": "^2.0.6",
     "ringo_cat_facts": "0.0.2"
   }
 }
