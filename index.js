@@ -1,4 +1,5 @@
 var RtmClient = require('@slack/client').RtmClient;
+var WebClient = require('@slack/client').WebClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const http = require('http');
@@ -7,6 +8,7 @@ const fs = require('fs');
 
 var bot_token = process.env.SLACKIN_BOT_TOKEN || '';
 var rtm = new RtmClient(bot_token);
+var webClient = new WebClient(bot_token);
 
 // Loading Ringobot plugins
 var plugins = [];
@@ -32,13 +34,16 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
   for (var i = 0; i < plugins.length; i++) {
     var plugin = plugins[i];
     // if a bot has registered that it cares about messages, pass it in
-    var response = plugin.responseFor(message, rtm);
-    if (response) {
-      rtm.sendMessage(response, message.channel).catch(function(err) { 
-        console.log('err:', err)
-      });
-      break;
-    }
+    var response = plugin.responseFor && plugin.responseFor(message, rtm);
+  }
+});
+
+rtm.on(RTM_EVENTS.REACTION_ADDED, function(reaction) {
+  // ignore this user's reactions
+  if (reaction.user === rtm.activeUserId) return;
+  for (var i = 0; i < plugins.length; i++) {
+    var plugin = plugins[i];
+    plugin.reacted && plugin.reacted(reaction, rtm, webClient);
   }
 });
 

@@ -22,7 +22,8 @@ const CACTUS_FACTS = [
 class CactusFacts {
   static responseFor(message, rtm) {
     if (message.text.match(/cact(us|i) facts/)) {
-      return CACTUS_FACTS[Math.floor(CACTUS_FACTS.length * Math.random())];
+      let cf = CACTUS_FACTS[Math.floor(CACTUS_FACTS.length * Math.random())];
+      rtm.sendMessage(cf, message.channel)
     }
   }
 }
