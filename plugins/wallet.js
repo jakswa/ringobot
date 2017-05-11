@@ -71,7 +71,12 @@ class Wallet {
     target = target ? target[1] : message.user;
     SlackWallet.getBalance(target).then((bits) => {
       let msg = `<@${target}> is at ${parseInt(bits)} bits.`
-      rtm.sendMessage(msg, message.channel);
+      rtm.send({
+        type: RTM_EVENTS.MESSAGE,
+        text: msg,
+        channel: message.channel,
+        thread_ts: message.thread_ts || message.ts
+      });
     }).catch((err) => rtm.sendMessage(err.message, message.channel))
   }
 }
