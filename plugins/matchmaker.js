@@ -36,14 +36,14 @@ class Matchmaker {
     let users = this.users.map((user) => `<@${user}>`).join(' ');
     rtm.send({
       type: RTM_EVENTS.MESSAGE,
-      text: `${this.matchAttrs.name} is on! Join in ${users}`,
+      text: `${this.matchAttrs.name} is on! ${this.matchAttrs.titles}: ${users}`,
       channel: this.channel,
       thread_ts: this.timestamp
     });
   }
 
   static responseFor(message, rtm, web) {
-    let match = message.text.match(/(?:<@([^>]+)> )?needs? (\d+) (people|racers) for (\w+\W?\w+)/);
+    let match = message.text.match(/(?:<@([^>]+)> )?needs? (\d+) (.+) for (\w+\W?\w+)/);
     if (match) {
       let matchmaker = new Matchmaker(message, match[1] || message.user, {
         name: match[4],
@@ -78,7 +78,7 @@ class Matchmaker {
     let config = COMMANDS[params.command];
     if (config) {
       return {
-        text: `<@${params.user_id}> needs ${config.users} ${config.titles} for ${config.name}! Jump in.`,
+        text: `<@${params.user_id}> needs ${config.users} ${config.titles} for ${config.name}! Join in with any emoji reaction.`,
         response_type: "in_channel"
       };
     }
