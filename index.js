@@ -2,7 +2,6 @@ var RtmClient = require('@slack/client').RtmClient;
 var WebClient = require('@slack/client').WebClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
-const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
@@ -50,13 +49,31 @@ rtm.on(RTM_EVENTS.REACTION_ADDED, function(reaction) {
 
 rtm.start();
 
-const server = http.createServer((req, res) => {
-  res.end();
+// ---- BEGIN WEB INTERFACE FOR SLASH COMMANDS ----
+
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.post("/slash-commands", function (req, res) {
+  let params = req.body;
+
+  for (var i = 0; i < plugins.length; i++) {
+    var plugin = plugins[i];
+    // if a bot has registered that it cares about messages, pass it in
+    if (!plugin.slashCommand) continue;
+    var resp = plugin.slashCommand(params, rtm, webClient);
+    if (resp && resp.message) {
+      res.status(201).json(resp);
+    } else {
+      res.status(201).send(resp || null);
+    }
+  }
 });
 
-server.on('clientError', (err, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+let port = process.env['PORT'] || 3000;
+app.listen(port, function() {
+  console.log("Listenin' for slash commands on port " + port);
 });
-
-server.listen(process.env['PORT']);
-

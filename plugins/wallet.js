@@ -17,7 +17,6 @@ class Wallet {
 
 
   static reacted(reaction, rtm, web) {
-    console.log(':D==>', reaction);
     // this plugin reacts to 10/100/1000 bits
     let match = reaction.reaction.match(/(10{1,3})bits$/);
     if (!match) return;
