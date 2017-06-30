@@ -1,8 +1,10 @@
 const secrets = require.main.require('./secrets');
 const slackInfo = require.main.require('./lib/slack_info');
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
+const SlackWallet = require.main.require('./lib/slack_wallet')
 
 const ROUND_SIZE = 10;
+const PRIZE_AMOUNT = 0.0001; // 100 bits
 const START_DELAY = 5; // seconds to allow thread joining
 const TRIVIA_STARTS = [/i.*need.*trivia/i, /trivia me/i, /host some trivia/i];
 const LETS_GO = [
@@ -77,8 +79,13 @@ class ThreadTrivia {
     if (newQuestion) {
       this.send(answer + "! <@" + message.user + "> got it! New question: " + newQuestion, rtm);
     } else {
+      let leaders = this.leaderBoard();
+      let winner = leaders[0];
+      let winnerID = slackInfo.idFor(winner[0]);
+      SlackWallet.transfer(PRIZE_AMOUNT, rtm.activeUserId, winnerID);
       let msg = " Round complete! Final standings:\n" +
-        this.leaderBoardPrintout();
+        winner[0] + " won! They get " + PRIZE_AMOUNT + " bits.\n" +
+        this.leaderBoardPrintout(leaders);
       this.send(msg, rtm);
       this.finishSession();
     }
@@ -93,12 +100,12 @@ class ThreadTrivia {
     return scoreArray.slice(0,10);
   }
 
-  leaderBoardPrintout() {
-    var leaders = this.leaderBoard();
+  leaderBoardPrintout(leaders) {
+    if (!leaders) leaders = this.leaderBoard();
     if (leaders.length > 0) {
       return leaders.reduce(function(acc, val) { return acc + val[0] + ' - ' + val[1] + "\n"; }, '')
     } else {
-      return "No leaders :()"
+      return "(no other participants??)"
     }
   }
 

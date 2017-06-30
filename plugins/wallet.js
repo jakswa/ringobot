@@ -70,7 +70,7 @@ class Wallet {
     target = target ? target[1] : message.user;
     SlackWallet.getBalanceInfo(target).then((info) => {
       let native = info.wallet.native_balance;
-      let msg = `<@${target}> is at ${parseInt(info.inBits)} bits (${native.amount}${native.currency}).`
+      let msg = `<@${target}> is at ${parseInt(info.inBits)} bits (${native.amount} ${native.currency}).`
       rtm.send({
         type: RTM_EVENTS.MESSAGE,
         text: msg,
