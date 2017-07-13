@@ -7,6 +7,11 @@ const MATCHES = {};
 const COMMANDS = {
   "/mario": { users: 4, name: "mario", titles: "racers"}
 }; 
+const LUNCH_MSGS = [
+  "I'm on lunch break. A bot's gotta eat! :nomnom:",
+  "frantic /mario mode is engaged during lunch hour (physical mario queueing only).",
+  "physical queues get priority during lunch hour. Go stand by the TV!"
+];
 
 class Matchmaker {
   constructor(message, creator, attrs) {
@@ -75,14 +80,33 @@ class Matchmaker {
   }
 
   static slashCommand(params, rtm, web) {
+    // lunchtime is frantic mode for mario kart
+    if (params.command === '/mario' && this.outToLunch()) {
+      let ind = Math.floor(Math.random() * LUNCH_MSGS.length);
+      return {
+        text: `Sorry <@${params.user_id}>, ${LUNCH_MSGS[ind]}`,
+        response_type: "in_channel"
+      }
+    }
     let config = COMMANDS[params.command];
     if (config) {
       return {
         text: `<@${params.user_id}> needs ${config.users} ${config.titles} for ${config.name}! Join in with any emoji reaction.`,
         response_type: "in_channel"
-      };
+      }
     }
     return null;
+  }
+
+  static outToLunch() {
+    let lunchStart = new Date();
+    lunchStart.setHours(12);
+    lunchStart.setMinutes(0);
+    lunchStart.setSeconds(0);
+    lunchStart.setMilliseconds(0);
+
+    let diff = (new Date()) - lunchStart;
+    return diff > 0 && diff <= 3600000; // difference within an hour
   }
 }
 
