@@ -12,6 +12,8 @@ const LUNCH_MSGS = [
   "frantic /mario mode is engaged during lunch hour (physical mario queueing only).",
   "physical queues get priority during lunch hour. Go stand by the TV!"
 ];
+// :oo: because it is final piece of M A R I O
+const FINISH_REACTIONS = ['white_check_mark', 'oo'];
 
 class Matchmaker {
   constructor(message, creator, attrs) {
@@ -23,7 +25,13 @@ class Matchmaker {
   }
 
   userReacted(reaction, rtm, web) {
-    if (this.users.indexOf(reaction.user) > -1) return;
+    if (this.users.indexOf(reaction.user) > -1) {
+      // participating users can lock the match in (tired of waiting on 4)
+      if (FINISH_REACTIONS.includes(reaction.reaction)) {
+        this.complete(rtm, web);
+      }
+      return;
+    }
 
     this.users.push(reaction.user);
     if (this.users.length >= this.matchAttrs.users) {
