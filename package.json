@@ -13,6 +13,6 @@
     "body-parser": "^1.17.2",
     "coinbase": "^2.0.6",
     "express": "^4.15.3",
-    "ringo_cat_facts": "0.0.4"
+    "ringo_facts": "0.0.1"
   }
 }
