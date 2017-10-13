@@ -26,6 +26,13 @@ class Wallet {
     this.xfer(value, reaction.user, reaction.item_user, rtm, web, reaction.item);
   }
 
+  static react(emoji, web, item) {
+    web.reactions.add(response, {
+      channel: item.channel,
+      timestamp: item.ts
+    }, (err, resp) => {});
+  }
+
   // white check mark
   static toast(response, web, item) {
     web.reactions.add(response, {
@@ -57,10 +64,10 @@ class Wallet {
 
       let xfer = SlackWallet.transfer(value, fromUser, toUser);
 
-      xfer.then(() => this.toast("white_check_mark", web, item))
+      xfer.then(() => this.react("white_check_mark", web, item))
         .catch((err)=> { 
           console.log(err);
-          rtm.sendMessage("error: " + err, item.channel);
+          this.react("x", web, item)
         })
     });
   }
