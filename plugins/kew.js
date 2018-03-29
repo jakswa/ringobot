@@ -23,6 +23,9 @@ class Kew {
       msgs.push(`${n}: position ${q.indexOf(message.user)}`);
     }
 
+    if(msgs.length === 0) {
+      msgs.push("You aren't queued for anything! The world is your oyster.");
+    }
     rtm.send({
       type: RTM_EVENTS.MESSAGE,
       text: msgs.join("\n"),
@@ -36,7 +39,7 @@ class Kew {
     var q = KEWS[kewName];
 
     var behind = q[q.length-1];
-    var behindMsg = behind ? `You're #${q.length - 1} in line, behind <@${behind}>!` : 'You are next!';
+    var behindMsg = behind ? `You're #${q.length > 1 ? q.length : 'next' } in line, behind <@${behind}>!` : 'You are next!';
     q.push(message.user);
 
     rtm.send({
@@ -53,7 +56,8 @@ class Kew {
       return;
     }
     for(var kewName in KEWS) {
-      if(KEWS[kewName].includes(reaction.user)) {
+      // `null` is at the front of the queue if someone failed to add 'behind <@user>' to start it
+      if(KEWS[kewName].includes(reaction.user) || KEWS[kewName].includes(null)) {
         this.loadMsg(reaction.item, web).then((msg) => {
           // also check attachment :O
           if (msg.text.includes(kewName) || (msg.attachments && msg.attachments[0].title.includes(kewName))) {
