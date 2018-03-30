@@ -28,4 +28,8 @@ class CactusFacts {
   }
 }
 
+CactusFacts.help = [
+  '`cact[us|i] facts` - print a fact about cacti'
+]
+
 module.exports = CactusFacts

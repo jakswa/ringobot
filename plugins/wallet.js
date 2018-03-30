@@ -81,4 +81,9 @@ class Wallet {
   }
 }
 
+Wallet.help = [
+  '`check balance` - check your wallet balance',
+  '`transfer X bits to @user` - transfer some bits'
+];
+
 module.exports = Wallet;

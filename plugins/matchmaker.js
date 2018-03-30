@@ -118,4 +118,9 @@ class Matchmaker {
   }
 }
 
+Matchmaker.help = [
+  '`i need X Y for Z` - matchmake X number of people with Y title, activity is Z. User is added.',
+  '`@<user> needs X Y for Z` - matchmake X number of people with Y title, activity is Z. <user> is added.'
+]
+
 module.exports = Matchmaker;

@@ -1,3 +1,8 @@
+const HELP = [
+  '`i [...] need [...] trivia` - start trivia',
+  '`trivia me` - start trivia',
+  '`host some trivia` - start trivia'
+];
 const secrets = require.main.require('./secrets');
 const slackInfo = require.main.require('./lib/slack_info');
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
@@ -154,5 +159,7 @@ class ThreadTrivia {
     })
   }
 }
+
+ThreadTrivia.help = HELP;
 
 module.exports = ThreadTrivia;

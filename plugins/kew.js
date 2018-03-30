@@ -1,8 +1,8 @@
-/*
- * SYNTAX1: queue for [thing]
- * SYNTAX2: queue behind <user> for [thing]
- */
-// <name> -> [users] mapping
+const HELP = [
+  '`queue for [thing]` - Queues you for thing. If queue is empty, you immediately go.',
+  '`queue behind @<user> for [thing]` - Queues you for thing. If queue is empty, <user> goes in front of you',
+  ':checkered_flag: - This moves queues forward. Reacting user must be in queue. Reaction target must contain the text [thing].'
+];
 const KEWS = {};
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const FINISH_MOJIS = ['checkered_flag'];
@@ -107,5 +107,7 @@ class Kew {
     })
   }
 }
+
+Kew.help = HELP;
 
 module.exports = Kew

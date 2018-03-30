@@ -1,4 +1,8 @@
 module.exports = {
+  help: [
+    '`@[bot_name] hello` - say hello to ringobot',
+    ':nightmare_ringo: - say hello in emoji form'
+  ],
   responseFor: function(message, rtm) {
     // Turns out I picked an awkward API to write a hello bot for,
     // since it's not dead-easy to answer: Is my bot being mentioned?

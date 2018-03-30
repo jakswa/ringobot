@@ -30,7 +30,18 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
   // don't care about.. thread responses? they breaking it
   // TODO: figure out what all kinds of messages we should care about
   if (!message.text) return;
+  if (message.user === rtm.activeUserId) return;
   if (process.env.DEV && !message.text.match(/DEV/)) return;
+  var systemResp = helpResponse(message);
+  if (systemResp) {
+    rtm.send({
+      type: RTM_EVENTS.MESSAGE,
+      text: systemResp,
+      channel: message.channel,
+      thread_ts: message.thread_ts || message.ts
+    });
+    return;
+  }
   for (var i = 0; i < plugins.length; i++) {
     var plugin = plugins[i];
     // if a bot has registered that it cares about messages, pass it in
@@ -77,3 +88,26 @@ let port = process.env['PORT'] || 3000;
 app.listen(port, function() {
   console.log("Listenin' for slash commands on port " + port);
 });
+
+function helpResponse(message) {
+  var regex = new RegExp(`^<@${rtm.activeUserId}> help *(.*)$`);
+  var match = message.text.match(regex);
+  var msgs = [];
+  if (match) {
+    var query = match[1];
+    plugins.forEach((plugin) => {
+      if (plugin.help) {
+        plugin.help.forEach((help) => {
+          if(!query || help.includes(query)) {
+            msgs.push(help); 
+          }
+        });
+      }
+    });
+    if (msgs.length > 0) {
+      return msgs.join("\n");
+    } else {
+      return `Could not find any help for ${query} :sadpanda:`;
+    }
+  }
+}
