@@ -1,6 +1,8 @@
 const HELP = [
   '`queue for [thing]` - Queues you for thing. If queue is empty, you immediately go.',
   '`queue behind @<user> for [thing]` - Queues you for thing. If queue is empty, <user> goes in front of you',
+  '`my queue position` - prints out your queue spots, if any',
+  '`remove [me|@user] from [thing] queue` - does the thing',
   ':checkered_flag: - This moves queues forward. Reacting user must be in queue. Reaction target must contain the text [thing].'
 ];
 const KEWS = {};
@@ -13,6 +15,24 @@ class Kew {
     if (match) this.enkew(match[2], match[1], message, rtm);
     match = message.text.match(/my queue position/)
     if (match) this.listUserKews(message, rtm);
+    match = message.text.match(/remove ?(?:me|<@(\S+)>)? from (\S+) queue/)
+    if (match) this.unkew(match[1], match[2], message, rtm, web);
+  }
+
+  static unkew(user, queue, message, rtm, web) {
+    if (!user || user === 'me') user = message.user;
+    var q = KEWS[queue];
+    if (!q || !q.includes(user)) {
+      var emoji = 'question_block';
+    } else {
+      q.splice(q.indexOf(user), 1);
+      emoji = 'thumbs-up'
+    }
+    web.reactions.add(
+      emoji,
+      { channel: message.channel, timestamp: message.ts },
+      (err, resp) => { }
+    );
   }
 
   static listUserKews(message, rtm) {
