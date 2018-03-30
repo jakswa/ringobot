@@ -35,16 +35,25 @@ class Kew {
   }
 
   static enkew(kewName, initBehind, message, rtm) {
-    if (!KEWS[kewName]) KEWS[kewName] = [initBehind];
+    if (!KEWS[kewName]) KEWS[kewName] = [];
     var q = KEWS[kewName];
+    if (initBehind && q.length === 0) {
+      q.push(initBehind);
+    }
 
-    var behind = q[q.length-1];
-    var behindMsg = behind ? `You're #${q.length > 1 ? q.length : 'next' } in line, behind <@${behind}>!` : 'You are next!';
+    var msg = `Put you into the ${kewName} queue!`;
+    // queueing up with no 'behind <user>', and its empty... you go!
+    if (q.length === 0) {
+      msg += " The queue was empty! You are up!";
+    } else {
+      var behind = q[q.length-1];
+      msg += ` You're ${q.length > 1 ? ("#" + q.length) : 'next' } in line, behind <@${behind}>!`;
+    }
     q.push(message.user);
 
     rtm.send({
       type: RTM_EVENTS.MESSAGE,
-      text: `Queued you for ${kewName}! ${behindMsg}`,
+      text: msg,
       channel: message.channel,
       thread_ts: message.thread_ts || message.ts
     });
