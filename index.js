@@ -68,6 +68,10 @@ const app = express();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.get("/health-check", function(req, res) {
+  res.status(200).send('ok');
+});
+
 app.post("/slash-commands", function (req, res) {
   let params = req.body;
 
