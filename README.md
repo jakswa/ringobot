@@ -16,8 +16,10 @@ We loop through plugins, essentially calling:
 
 ```javascript
 var plugin = require('your_plugin');
-var response = plugin.responseFor(message, rtm)
-if (response) { rtm.sendMessage(response, message.channel) }
+plugin.responseFor(message, rtm, webClient); // if the plugin cares about chat messages
+plugin.reacted(reaction, rtm, webClient); // if the plugin cares about emoji reactions
+plugin.slachCommand(params, rtm, webClient); // if ringobot receives a slash command your plugin cares about
+                                             // (these are configured on slack's website, for your organization)
 ```
 
 The first plugin to return anything *wins* the message, at the moment.
@@ -27,6 +29,7 @@ The first plugin to return anything *wins* the message, at the moment.
 - `slackMessage` (`message`) is a https://api.slack.com/events/message
 - `realTimeClient` (`rtm`) is RTM client from the [Slack Node SDK](https://github.com/slackapi/node-slack-sdk#posting-a-message-with-the-real-time-messaging-api)
   - in the future, we can PM/etc using this object
+- [`webClient`](https://slackapi.github.io/node-slack-sdk/web_api) is how I've been adding new reactions (couldn't figure out how to do it with RTM client)
 
 # ENV variables
 
