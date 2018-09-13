@@ -7,7 +7,7 @@ Responses appear in the room they were heard.
 # Plugin sources
 
 - **Local** plugins in the `/plugins` directory get loaded automatically.
-- **NPM** plugins need to be `npm install --saved` and then have their name inserted into `external_plugin_list.json` (for `require`-ing)
+- **NPM** plugins need to be `npm install --save`'d and then have their name inserted into `external_plugin_list.json` (for `require`-ing)
 
 # Plugin interface
 
@@ -21,8 +21,6 @@ plugin.reacted(reaction, rtm, webClient); // if the plugin cares about emoji rea
 plugin.slachCommand(params, rtm, webClient); // if ringobot receives a slash command your plugin cares about
                                              // (these are configured on slack's website, for your organization)
 ```
-
-The first plugin to return anything *wins* the message, at the moment.
 
 ## Parameters
 
